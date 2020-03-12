@@ -17,6 +17,8 @@ signal to specified pins on a GPIO breakout board connected to the computer (e.g
 principle, these commands are similar to those that you might send to the pins on a Raspberry Pi.
 - This code has been tested using our in-lab setup; we can make no guarantees about the code working on
 your setup.
+- If you wish to try the code, clone this repository and put `predict_stream.py`, `led_test.py`, and `__init.py__` in the `pose_estimation_tensorflow` subfolder
+of your DeepLabCut installation. We are still working on integrating the package more robustly with DeepLabCut - please proceed with caution.
 
 ## Dependencies
 In addition to installing [DeepLabCut](https://github.com/AlexEMG/DeepLabCut/blob/master/docs/installation.md), you need
