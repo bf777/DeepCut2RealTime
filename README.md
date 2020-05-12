@@ -1,7 +1,7 @@
 # DeepCut2RealTime
 Welcome to DeepCut2RealTime, an add-on for DeepLabCut that enables real-time tracking
 and reinforcement of animal behaviours. This code was used to carry out the behavioural experiments outlined
-in Forys, Xiao, Gupta, and Murphy (under review). It builds upon the code outlined in [Forys, Xiao, Gupta,
+in [Forys, Xiao, Gupta, and Murphy (2020)](), and builds upon the code outlined in [Forys, Xiao, Gupta,
 Boyd, and Murphy (2018)](https://doi.org/10.1101/482349).
 
 ## Features:
@@ -32,6 +32,10 @@ The code was developed by [Brandon Forys](https://github.com/bf777) and [Dongshe
 with help from [Pankaj Gupta](https://github.com/pankajkgupta) at the [Murphy Lab](https://murphylab.med.ubc.ca/) 
 at the University of British Columbia. It is adapted from [DeepLabCut](https://github.com/AlexEMG/DeepLabCut), which is
 licensed under the [GNU Lesser General Public License v3.0](https://github.com/AlexEMG/DeepLabCut/blob/master/LICENSE).
+
+This code was used in the following article: 
+
+**To be updated upon release of paper**
 
 This code is built on our past work found in [this bioRxiV preprint](https://doi.org/10.1101/482349)
 and our accompanying [DeepCutRealTime repo](https://github.com/bf777/DeepCutRealTime), which you can cite here:

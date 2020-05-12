@@ -1,7 +1,7 @@
 """
 Adapted from pyftdi library
 by:
-B Forys, brandon.forys@ubc.ca
+B Forys, brandon.forys@alumni.ubc.ca
 Run this script to test an LED or similar input on a breakout board.
 Call the LEDTest() class in this script to test a specific GPIO port on the board
 """

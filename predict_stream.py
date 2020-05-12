@@ -1,6 +1,6 @@
 """
 Adapted by:
-B Forys, brandon.forys@ubc.ca
+B Forys, brandon.forys@alumni.ubc.ca
 D Xiao,
 P Gupta,
 from DeepLabCut Toolbox
