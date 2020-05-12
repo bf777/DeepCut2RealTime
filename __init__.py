@@ -4,6 +4,10 @@ https://github.com/AlexEMG/DeepLabCut
 A Mathis, alexander.mathis@bethgelab.org
 T Nath, nath@rowland.harvard.edu
 M Mathis, mackenzie@post.harvard.edu
+Adapted for DeepCut2RealTime by:
+B Forys, brandon.forys@alumni.ubc.ca,
+D Xiao,
+P Gupta
 
 The feature detectors in DeepLabCut are based of DeeperCut.
 Our toolbox provides an interface to DeeperCut by Eldar Insafutdinov et al.
