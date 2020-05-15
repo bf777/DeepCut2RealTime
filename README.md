@@ -1,8 +1,10 @@
 # DeepCut2RealTime
 Welcome to DeepCut2RealTime, an add-on for DeepLabCut that enables real-time tracking
 and reinforcement of animal behaviours. This code was used to carry out the behavioural experiments outlined
-in [Forys, Xiao, Gupta, and Murphy (2020)](https://doi.org/10.1523/ENEURO.0096-20.2020), and builds upon the code outlined in [Forys, Xiao, Gupta,
-Boyd, and Murphy (2018)](https://doi.org/10.1101/482349).
+in our eNeuro paper: [Forys, Xiao, Gupta, and Murphy (2020)](https://doi.org/10.1523/ENEURO.0096-20.2020), 
+and builds upon the code outlined in our bioRxiV preprint: [Forys, Xiao, Gupta, Boyd, and Murphy (2018)](https://doi.org/10.1101/482349). 
+The included MATLAB files were used to analyze the occurrence of LED flashes during the experiment (for more details, 
+see our _eNeuro_ paper).
 
 ## Features:
 - Integrates with DeepLabCut 2.0.6 and later through an easy-to-use iPython interface.
