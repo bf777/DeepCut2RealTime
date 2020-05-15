@@ -1,7 +1,7 @@
 # DeepCut2RealTime
 Welcome to DeepCut2RealTime, an add-on for DeepLabCut that enables real-time tracking
 and reinforcement of animal behaviours. This code was used to carry out the behavioural experiments outlined
-in [Forys, Xiao, Gupta, and Murphy (2020)](), and builds upon the code outlined in [Forys, Xiao, Gupta,
+in [Forys, Xiao, Gupta, and Murphy (2020)](https://doi.org/10.1523/ENEURO.0096-20.2020), and builds upon the code outlined in [Forys, Xiao, Gupta,
 Boyd, and Murphy (2018)](https://doi.org/10.1101/482349).
 
 ## Features:
@@ -33,9 +33,22 @@ with help from [Pankaj Gupta](https://github.com/pankajkgupta) at the [Murphy La
 at the University of British Columbia. It is adapted from [DeepLabCut](https://github.com/AlexEMG/DeepLabCut), which is
 licensed under the [GNU Lesser General Public License v3.0](https://github.com/AlexEMG/DeepLabCut/blob/master/LICENSE).
 
-This code was used in the following article: 
+This code was used in the following article - please cite it if you plan to use it:
+```text
+@article {ForysENEURO.0096-20.2020,
+	author = {Forys, Brandon J and Xiao, Dongsheng and Gupta, Pankaj and Murphy, Timothy H},
+	title = {Real-time selective markerless tracking of forepaws of head fixed mice using deep neural networks},
+	elocation-id = {ENEURO.0096-20.2020},
+	year = {2020},
+	doi = {10.1523/ENEURO.0096-20.2020},
+	publisher = {Society for Neuroscience},
+	abstract = {Here, we describe a system capable of tracking specific mouse paw movements at high frame rates (70.17 Hz) with a high level of accuracy (M = 0.95, SD = 0.01). Short-latency markerless tracking of specific body parts opens up the possibility of manipulating motor feedback. We present a software and hardware scheme built on DeepLabCut {\textendash} a robust movement-tracking deep neural network framework {\textendash} that enables real-time estimation of paw and digit movements of mice. Using this approach, we demonstrate movement-generated feedback by triggering a USB-CGPIO controlled LED when the movement of one paw, but not the other, selectively exceeds a pre-set threshold. The time delay between paw movement initiation and LED flash was M = 44.41 ms, SD = 36.39 ms, a latency sufficient for applying behaviorally-triggered feedback. We adapt DeepLabCut for real-time tracking as an open-source package we term DeepCut2RealTime. The package{\textquoteright}s ability to rapidly assess animal behavior was demonstrated by reinforcing specific movements within water-restricted, head-fixed mice. This system could inform future work on a behaviorally triggered {\textquoteleft}closed loop{\textquoteright} brain-machine interface that could reinforce behaviors or deliver feedback to brain regions based on pre-specified body movements.Significance statement We present a software and hardware scheme modified from DeepLabCut {\textendash} a robust movement-tracking deep neural network framework {\textendash} that enables real-time estimation of paw and digit movements of mice. Coupled to the body part tracking is the ability to rapidly trigger external events such as rewards upon the detection of specific behaviors. This system lays the groundwork for a behaviorally triggered {\textquoteleft}closed loop{\textquoteright} brain-machine interface that could reinforce behaviors and deliver feedback to brain regions based on pre-specified body movements.},
+	URL = {https://www.eneuro.org/content/early/2020/05/14/ENEURO.0096-20.2020},
+	eprint = {https://www.eneuro.org/content/early/2020/05/14/ENEURO.0096-20.2020.full.pdf},
+	journal = {eNeuro}
+}
+``` 
 
-**To be updated upon release of paper**
 
 This code is built on our past work found in [this bioRxiV preprint](https://doi.org/10.1101/482349)
 and our accompanying [DeepCutRealTime repo](https://github.com/bf777/DeepCutRealTime), which you can cite here:
