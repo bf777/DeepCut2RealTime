@@ -52,7 +52,7 @@ from pysentech import SentechSystem
 ####################################################
 
 def analyze_stream(config, destfolder, shuffle=1, trainingsetindex=0, gputouse=0, save_as_csv=False, save_frames=True,
-                   cropping=None, baseline=True, name="default_animal", camtype="cv2"):
+                   cropping=None, baseline=True, name="default_animal"):
     """
     Makes prediction based on a trained network. The index of the trained network is specified by parameters in the config file (in particular the variable 'snapshotindex')
 
@@ -189,7 +189,7 @@ def analyze_stream(config, destfolder, shuffle=1, trainingsetindex=0, gputouse=0
     empty_count = 0
     global threshold_count
     AnalyzeStream(DLCscorer, trainFraction, cfg, dlc_cfg, sess, inputs, outputs, pdindex, save_as_csv, save_frames,
-                  destfolder, name, baseline, camtype)
+                  destfolder, name, baseline)
 
 ##################################################
 # We define our own two-frame batches for real-time tracking, so we don't use builtin batchwise pose prediction.
@@ -245,7 +245,7 @@ def analyze_stream(config, destfolder, shuffle=1, trainingsetindex=0, gputouse=0
 #     return PredicteData
 
 
-def GetPoseS(cfg, dlc_cfg, sess, inputs, outputs, cap, w, h, nframes, save_frames, destfolder, baseline, camtype):
+def GetPoseS(cfg, dlc_cfg, sess, inputs, outputs, cap, w, h, nframes, save_frames, destfolder, baseline):
     """ Non batch wise pose estimation for video cap."""
     # Prepare data arrays
     global lastFrameWasMoved
@@ -292,12 +292,10 @@ def GetPoseS(cfg, dlc_cfg, sess, inputs, outputs, cap, w, h, nframes, save_frame
     frame_arr = []
     try:
         while cap:
-            if camtype == 'sentech':
-                frame = cap.grab_frame()
-                frame = frame.as_numpy()
-                frame = np.uint8(frame)
-            elif camtype == 'cv2':
-                ret, frame = cap.read()
+            frame = cap.grab_frame()
+            # ret, frame = cap.read()
+            frame = frame.as_numpy()
+            frame = np.uint8(frame)
             # if ret:
             if frame.any():
                 frame = skimage.color.gray2rgb(frame)
@@ -339,20 +337,14 @@ def GetPoseS(cfg, dlc_cfg, sess, inputs, outputs, cap, w, h, nframes, save_frame
 
 
 def AnalyzeStream(DLCscorer, trainFraction, cfg, dlc_cfg, sess, inputs, outputs, pdindex, save_as_csv, save_frames,
-                  destfolder, name, baseline, camtype):
+                  destfolder, name, baseline):
     """Sets up camera connection for pose estimation, and handles data output."""
     # Setup camera connection
-    if camtype == 'sentech':
-        # REPLACE WITH PATH TO YOUR SENTECH CAMERA SDK!
-        sdk_location = r"C:\Users\TM_Lab\Desktop\Greg_desktop\StCamUSBPack_EN_190207\3_SDK\StandardSDK(v3.14)"
-        system = SentechSystem(sdk_location)
-        cam = system.get_camera(0)
-        print("Sentech camera connected! The camera model is " + str(cam.model.decode("utf-8")))
-        size = (int(cam.image_shape[0]), int(cam.image_shape[1]))
-    elif camtype == 'cv2':
-        cam = cv2.VideoCapture(0)
-        print("CV2-compatible camera connected!")
-        size = (int(cam.get(3)), int(cam.get(4)))
+    # REPLACE WITH PATH TO YOUR SENTECH CAMERA SDK!
+    sdk_location = r"C:\Users\TM_Lab\Desktop\Greg_desktop\StCamUSBPack_EN_190207\3_SDK\StandardSDK(v3.14)"
+    system = SentechSystem(sdk_location)
+    cam = system.get_camera(0)
+    print("Camera connected! The camera model is " + str(cam.model.decode("utf-8")))
 
     print("Starting to analyze stream")
     # Accept a single connection and make a file-like object out of it
@@ -361,6 +353,8 @@ def AnalyzeStream(DLCscorer, trainFraction, cfg, dlc_cfg, sess, inputs, outputs,
     dataname_led = os.path.join(destfolder, DLCscorer + '_' + name + '_LED.h5')
     led_data_cols = ['FrameTime', 'MovementDiffLeft', 'MovementDiffRight', 'ThresholdTime', 'Delay', 'FlashTime',
                      'WaterTime']
+    size = (int(cap.image_shape[0]), int(cap.image_shape[1]))
+    # size = (int(cap.get(3)), int(cap.get(4)))
     w, h = size
     shutter = 1/500
     brightness = 68
@@ -371,7 +365,7 @@ def AnalyzeStream(DLCscorer, trainFraction, cfg, dlc_cfg, sess, inputs, outputs,
 
     print("Starting to extract posture")
     start = time.time()
-    nframes = GetPoseS(cfg, dlc_cfg, sess, inputs, outputs, cap, w, h, nframes, save_frames, destfolder, baseline, camtype)
+    nframes = GetPoseS(cfg, dlc_cfg, sess, inputs, outputs, cap, w, h, nframes, save_frames, destfolder, baseline)
 
     # stop the timer and display FPS information
     stop = time.time()

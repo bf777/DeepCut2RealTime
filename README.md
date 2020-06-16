@@ -12,24 +12,37 @@ see our _eNeuro_ paper).
 framerates (> 90 Hz) with customizable selection of behaviours to reinforce.
 
 ## Important notes:
-- At this time, DeepCut2RealTime has only been tested with the Sentech STC-MCCM401U3V USB-3 Vision camera; we are
+- At this time, DeepCut2RealTime has only been fully tested with the Sentech STC-MCCM401U3V USB-3 Vision camera; we are
 working on making it compatible with standard OpenCV cameras as well.
 - DeepCut2RealTime is set up to provide behavioural feedback by sending a high or low
 signal to specified pins on a GPIO breakout board connected to the computer (e.g. Adafruit rt232h). In
 principle, these commands are similar to those that you might send to the pins on a Raspberry Pi.
 - This code has been tested using our in-lab setup; we can make no guarantees about the code working on
 your setup.
-- If you wish to try the code:
-1. Clone this repository and put `predict_stream.py`, `led_test.py`, and `__init.py__` in the `pose_estimation_tensorflow` subfolder
-of your DeepLabCut installation.
-2.  Put `cli.py` in the `deeplabcut` folder (one level up from `pose_estimation_tensorflow`).
-3. To run the code, use our custom DeepLabCut function:
+- If you wish to try a version of the code that is compatible with OpenCV webcams:
+1. Use DeepLabCut to train a pose estimation model with eight points (you can train it with fewer or more points, but this
+may require you to change the threshold code to avoid errors. A guide to changing the feedback threshold is coming soon!)
+2. Clone this repository and put `predict_stream.py` and `__init.py__` in the `pose_estimation_tensorflow` subfolder
+of your DeepLabCut installation. Only add `led_test.py` to this folder if you have a USB-GPIO board for delivery of feedback, otherwise
+this file will return errors! All references to this Python module have been commented out in this version of `predict_stream.py`.
+- This version of the code has been tested on MacOS 10.15 (Catalina) with the built-in webcam; it should work on other
+platforms as well.
+3.  Put `__init.py__` from the `top_level` folder, and `cli.py`, in the `deeplabcut` folder (one level up from `pose_estimation_tensorflow`).
+4. To run the code, use our custom DeepLabCut function:
 ```python
-deeplabcut.analyze_stream(config_path, save_path, save_as_csv=True, save_frames=True, baseline=False, name=animal_name)
+deeplabcut.analyze_stream(config_path, save_path, save_as_csv=True, save_frames=True, baseline=False, name=animal_name, camtype='cv2s')
 ```
-Where `config_path` is the path to your DeepLabCut model configuration file, `save_path` is the path to an output folder,
-and `animal_name` is the name of the current animal that you are analyzing (if left blank, the animal name will be `'default_animal'`).
-
+Shortcut (using default options as listed above):
+```python
+deeplabcut.analyze_stream(config_path, save_path)
+```
+Where:
+ - `config_path` is the path to your DeepLabCut model configuration file
+ - `save_path` is the path to an output folder
+ - `animal_name` is the name of the current animal that you are analyzing (if left blank, the animal name will be `'default_animal'`)
+ - `camtype` is the type of camera you are using (`'cv2'` for standard, openCV-compatible webcam, `'sentech'` for Sentech USB3 camera
+ as used in our paper.
+ 
 There are a number of options that you can also define:
 `save_as_csv`: Choose whether or not to save the output data to CSV.
 
@@ -40,7 +53,8 @@ This should not create significant computational overhead as it is handled in a 
 In our study, we alternated between baseline and training trials to evaluate the animal's ability to respond only when cued to do so
 (by an LED that illuminates during training trials only).
 
-We are still working on integrating the package more robustly with DeepLabCut - please proceed with caution.
+We are still working on integrating the package more robustly with DeepLabCut - please proceed with caution. To view the
+original Python code used in our publication, take a look at the `original_code` folder.
 
 ## Dependencies
 In addition to installing [DeepLabCut](https://github.com/AlexEMG/DeepLabCut/blob/master/docs/installation.md), you need

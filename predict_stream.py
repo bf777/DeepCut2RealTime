@@ -13,8 +13,7 @@ This script analyzes a streaming video from a local webcam based
 on a trained network. You need tensorflow for evaluation. Run by:
 CUDA_VISIBLE_DEVICES=0 python3 predict_stream.py
 
-PLEASE NOTE: THIS SCRIPT IS CURRENTLY ONLY COMPATIBLE WITH OMRON SENTECH USB-3 CAMERAS (we are working on adapting it
-for openCV-supported webcams).
+PLEASE NOTE: This script is set up to work with OpenCV web.
 """
 
 ####################################################
@@ -41,10 +40,10 @@ from copy import deepcopy
 
 # GPIO dependencies
 from deeplabcut.utils import led_test
-from pyftdi.gpio import GpioException
+# from pyftdi.gpio import GpioException
 
 # Camera dependencies
-from pysentech import SentechSystem
+# from pysentech import SentechSystem
 
 
 ####################################################
@@ -52,7 +51,7 @@ from pysentech import SentechSystem
 ####################################################
 
 def analyze_stream(config, destfolder, shuffle=1, trainingsetindex=0, gputouse=0, save_as_csv=False, save_frames=True,
-                   cropping=None, baseline=True, name="default_animal"):
+                   cropping=None, baseline=True, name="default_animal", camtype="cv2"):
     """
     Makes prediction based on a trained network. The index of the trained network is specified by parameters in the config file (in particular the variable 'snapshotindex')
 
@@ -189,7 +188,7 @@ def analyze_stream(config, destfolder, shuffle=1, trainingsetindex=0, gputouse=0
     empty_count = 0
     global threshold_count
     AnalyzeStream(DLCscorer, trainFraction, cfg, dlc_cfg, sess, inputs, outputs, pdindex, save_as_csv, save_frames,
-                  destfolder, name, baseline)
+                  destfolder, name, baseline, camtype)
 
 ##################################################
 # We define our own two-frame batches for real-time tracking, so we don't use builtin batchwise pose prediction.
@@ -245,7 +244,7 @@ def analyze_stream(config, destfolder, shuffle=1, trainingsetindex=0, gputouse=0
 #     return PredicteData
 
 
-def GetPoseS(cfg, dlc_cfg, sess, inputs, outputs, cap, w, h, nframes, save_frames, destfolder, baseline):
+def GetPoseS(cfg, dlc_cfg, sess, inputs, outputs, cap, w, h, nframes, save_frames, destfolder, baseline, camtype):
     """ Non batch wise pose estimation for video cap."""
     # Prepare data arrays
     global lastFrameWasMoved
@@ -275,27 +274,30 @@ def GetPoseS(cfg, dlc_cfg, sess, inputs, outputs, cap, w, h, nframes, save_frame
             raise Exception('Please check the order of cropping parameter!')
 
     # Set up GPIO board
-    LED = led_test.LEDTest()
-    mask = 0xFF
-    LED.open(mask)
+    # LED = led_test.LEDTest()
+    # mask = 0xFF
+    # LED.open(mask)
     # Tries to initialize all GPIO ports used in code to low state (0) so that they won't accidentally turn on at the start
     # of the trial.
-    try:
-        LED.set_gpio(5, False)
-        LED.set_gpio(6, False)
-        LED.set_gpio(7, False)
-    except GpioException:
-        pass
+    # try:
+    #     LED.set_gpio(5, False)
+    #     LED.set_gpio(6, False)
+    #     LED.set_gpio(7, False)
+    # except GpioException:
+    #     pass
+    LED = ''
     start = time.time()
     counter = 0
     threshold_count = 0
     frame_arr = []
     try:
         while cap:
-            frame = cap.grab_frame()
-            # ret, frame = cap.read()
-            frame = frame.as_numpy()
-            frame = np.uint8(frame)
+            if camtype == 'sentech':
+                frame = cap.grab_frame()
+                frame = frame.as_numpy()
+                frame = np.uint8(frame)
+            elif camtype == 'cv2':
+                ret, frame = cap.read()
             # if ret:
             if frame.any():
                 frame = skimage.color.gray2rgb(frame)
@@ -332,29 +334,33 @@ def GetPoseS(cfg, dlc_cfg, sess, inputs, outputs, cap, w, h, nframes, save_frame
         print("Finished.")
         cap.release()
         exit()
-    LED.close()
+    # LED.close()
     return nframes
 
 
 def AnalyzeStream(DLCscorer, trainFraction, cfg, dlc_cfg, sess, inputs, outputs, pdindex, save_as_csv, save_frames,
-                  destfolder, name, baseline):
+                  destfolder, name, baseline, camtype):
     """Sets up camera connection for pose estimation, and handles data output."""
     # Setup camera connection
-    # REPLACE WITH PATH TO YOUR SENTECH CAMERA SDK!
-    sdk_location = r"C:\Users\TM_Lab\Desktop\Greg_desktop\StCamUSBPack_EN_190207\3_SDK\StandardSDK(v3.14)"
-    system = SentechSystem(sdk_location)
-    cam = system.get_camera(0)
-    print("Camera connected! The camera model is " + str(cam.model.decode("utf-8")))
+    if camtype == 'sentech':
+        # REPLACE WITH PATH TO YOUR SENTECH CAMERA SDK!
+        sdk_location = r"C:\Users\TM_Lab\Desktop\Greg_desktop\StCamUSBPack_EN_190207\3_SDK\StandardSDK(v3.14)"
+        system = SentechSystem(sdk_location)
+        cam = system.get_camera(0)
+        print("Sentech camera connected! The camera model is " + str(cam.model.decode("utf-8")))
+        size = (int(cam.image_shape[0]), int(cam.image_shape[1]))
+    elif camtype == 'cv2':
+        cam = cv2.VideoCapture(0)
+        print("CV2-compatible camera connected!")
+        size = (int(cam.get(3)), int(cam.get(4)))
 
     print("Starting to analyze stream")
     # Accept a single connection and make a file-like object out of it
     cap = cam
-    dataname = os.path.join(destfolder, DLCscorer + '_' + name + '.h5')
-    dataname_led = os.path.join(destfolder, DLCscorer + '_' + name + '_LED.h5')
+    dataname = os.path.join(destfolder, '{}_{}.h5'.format(DLCscorer, name))
+    dataname_led = os.path.join(destfolder, '{}_{}_LED.h5'.format(DLCscorer, name))
     led_data_cols = ['FrameTime', 'MovementDiffLeft', 'MovementDiffRight', 'ThresholdTime', 'Delay', 'FlashTime',
                      'WaterTime']
-    size = (int(cap.image_shape[0]), int(cap.image_shape[1]))
-    # size = (int(cap.get(3)), int(cap.get(4)))
     w, h = size
     shutter = 1/500
     brightness = 68
@@ -365,7 +371,7 @@ def AnalyzeStream(DLCscorer, trainFraction, cfg, dlc_cfg, sess, inputs, outputs,
 
     print("Starting to extract posture")
     start = time.time()
-    nframes = GetPoseS(cfg, dlc_cfg, sess, inputs, outputs, cap, w, h, nframes, save_frames, destfolder, baseline)
+    nframes = GetPoseS(cfg, dlc_cfg, sess, inputs, outputs, cap, w, h, nframes, save_frames, destfolder, baseline, camtype)
 
     # stop the timer and display FPS information
     stop = time.time()
@@ -527,19 +533,19 @@ def frame_process(frame_arr, dlc_cfg, sess, inputs, outputs, counter, save_frame
 def led_task(LED, reached, trial_length):
     """Starts GPIO (green LED) output to indicate to the mouse when the trial has started."""
     if reached:
-        # print("Reached")
-        # Initiates LED
-        try:
-            LED.set_gpio(6, True)
-        except GpioException:
-            pass
-            # print("\nError switching light on!")
-        time.sleep(trial_length)
-        try:
-            LED.set_gpio(6, False)
-        except GpioException:
-            pass
-            # print("\nError switching light off!")
+        print("Reached")
+        # # Initiates LED
+        # try:
+        #     LED.set_gpio(6, True)
+        # except GpioException:
+        #     pass
+        #     # print("\nError switching light on!")
+        # time.sleep(trial_length)
+        # try:
+        #     LED.set_gpio(6, False)
+        # except GpioException:
+        #     pass
+        #     # print("\nError switching light off!")
 
 
 def thresholdFunc(LED, baseline, reached, gpio_light_time, gpio_water_time, counter, threshold_time):
@@ -550,23 +556,23 @@ def thresholdFunc(LED, baseline, reached, gpio_light_time, gpio_water_time, coun
         water_time = time.time()
         led_arr[counter + 1, 6] = water_time
         # Initiates LED
-        try:
-            LED.set_gpio(5, True)  # LED start
-            if not baseline:
-                LED.set_gpio(7, True)  # water start
-        except GpioException:
-            pass
-        time.sleep(gpio_water_time)
-        try:
-            if not baseline:
-                LED.set_gpio(7, False)  # water end
-        except GpioException:
-            pass
-        time.sleep(abs(gpio_light_time - gpio_water_time))
-        try:
-            LED.set_gpio(5, False)  # LED end
-        except GpioException:
-            pass
+        # try:
+        #     LED.set_gpio(5, True)  # LED start
+        #     if not baseline:
+        #         LED.set_gpio(7, True)  # water start
+        # except GpioException:
+        #     pass
+        # time.sleep(gpio_water_time)
+        # try:
+        #     if not baseline:
+        #         LED.set_gpio(7, False)  # water end
+        # except GpioException:
+        #     pass
+        # time.sleep(abs(gpio_light_time - gpio_water_time))
+        # try:
+        #     LED.set_gpio(5, False)  # LED end
+        # except GpioException:
+        #     pass
 
 
 def frame_save_func(frame, x_range, y_range, x_avg_left, y_avg_left, x_avg_right, y_avg_right, destfolder, n, counter):
