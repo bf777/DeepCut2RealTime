@@ -23,7 +23,7 @@ your setup.
 1. Clone this repository and put `predict_stream.py`, `led_test.py`, and `__init.py__` in the `pose_estimation_tensorflow` subfolder
 of your DeepLabCut installation.
 2.  Put `cli.py` in the `deeplabcut` folder (one level up from `pose_estimation_tensorflow`).
-3. To run the code, you will be able to run our custom DeepLabCut function:
+3. To run the code, use our custom DeepLabCut function:
 ```python
 deeplabcut.analyze_stream(config_path, save_path, save_as_csv=True, save_frames=True, baseline=False, name=animal_name)
 ```
