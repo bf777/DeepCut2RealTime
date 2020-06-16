@@ -25,7 +25,7 @@ may require you to change the threshold code to avoid errors. A guide to changin
 2. Clone this repository and put `predict_stream.py` and `__init.py__` in the `pose_estimation_tensorflow` subfolder
 of your DeepLabCut installation. Only add `led_test.py` to this folder if you have a USB-GPIO board for delivery of feedback, otherwise
 this file will return errors! All references to this Python module have been commented out in this version of `predict_stream.py`.
-- This version of the code has been tested on MacOS 10.15 (Catalina) with the built-in webcam; it should work on other
+- This version of the code has been tested on a MacBook Pro running MacOS 10.15 (Catalina) using a built-in webcam; it should work on other
 platforms as well.
 3.  Put `__init.py__` from the `top_level` folder, and `cli.py`, in the `deeplabcut` folder (one level up from `pose_estimation_tensorflow`).
 4. To run the code, use our custom DeepLabCut function:
