@@ -6,10 +6,14 @@ and builds upon the code outlined in our _bioRxiV_ preprint: [Forys, Xiao, Gupta
 The included MATLAB files were used to analyze the occurrence of LED flashes during the experiment (for more details, 
 see our _eNeuro_ paper).
 
+**NEW:** Test our real-time tracking system on your own computer (no installation required) using Google Colab! Click
+the following button to get started:
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bf777/deepcut2realtime/blob/master/notebooks/deepcut2realtime.ipynb)
+
 ## Features:
 - Integrates with DeepLabCut 2.0.6 and later through an easy-to-use iPython interface.
 - Combines real-time application of DeepLabCut's pose estimation framework at high
-framerates (> 90 Hz) with customizable selection of behaviours to reinforce.
+framerates (> 70 Hz) with customizable selection of behaviours to reinforce.
 
 ## Important notes:
 - At this time, DeepCut2RealTime has only been fully tested with the Sentech STC-MCCM401U3V USB-3 Vision camera; we are
