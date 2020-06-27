@@ -1,0 +1,11 @@
+# Packaging files
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Additional utilities still under construction
+*_on_off.py
+
+# Old versions of scripts kept as backups
+*_backup.py

@@ -39,7 +39,7 @@ import _thread
 from copy import deepcopy
 
 # GPIO dependencies
-from deeplabcut.utils import led_test
+# from deeplabcut.utils import led_test
 # from pyftdi.gpio import GpioException
 
 # Camera dependencies
