@@ -30,6 +30,9 @@ your setup.
 may require you to change the threshold code to avoid errors. A guide to changing the feedback threshold is coming soon!)
 2. Clone this repository and run `setup.py` to install the necessary dependencies.
 3. To run the code, enter your DeepLabCut environment (e.g. `activate DLC-CPU` or `activate DLC-GPU`), then:
+ - Define `config_path` as the path to your DeepLabCut model configuration file;
+ - Define `save_path` as the path to an output folder;
+ - Run:
 ```python
 deepcut2realtime.analyze_stream(config_path, save_path, save_as_csv=True, save_frames=True, baseline=False, name=animal_name, camtype='cv2')
 ```
