@@ -1,5 +1,5 @@
 # DeepCut2RealTime
-Welcome to DeepCut2RealTime, an add-on for DeepLabCut that enables real-time tracking
+Welcome to DeepCut2RealTime, an add-on for [DeepLabCut](https://github.com/DeepLabCut/DeepLabCut) that enables real-time tracking
 and reinforcement of animal behaviours. This code was used to carry out the behavioural experiments outlined
 in our _eNeuro_ paper: [Forys, Xiao, Gupta, and Murphy (2020)](https://doi.org/10.1523/ENEURO.0096-20.2020), 
 and builds upon the code outlined in our _bioRxiV_ preprint: [Forys, Xiao, Gupta, Boyd, and Murphy (2018)](https://doi.org/10.1101/482349). 
@@ -18,6 +18,8 @@ framerates (> 70 Hz) with customizable selection of behaviours to reinforce.
 ## Important notes:
 - At this time, DeepCut2RealTime has only been fully tested with the Sentech STC-MCCM401U3V USB-3 Vision camera; we are
 working on making it compatible with standard OpenCV cameras as well.
+- If you are not using a high speed camera with a GPU setup, do not expect to get the same framerate as we did in the paper. Typical
+frame rates with a MacBook Pro (CPU-based DeepLabCut) with a standard webcam are 15-20 Hz.
 - DeepCut2RealTime is set up to provide behavioural feedback by sending a high or low
 signal to specified pins on a GPIO breakout board connected to the computer (e.g. Adafruit rt232h). In
 principle, these commands are similar to those that you might send to the pins on a Raspberry Pi.
@@ -36,7 +38,7 @@ Where:
  - `save_path` is the path to an output folder
  - `animal_name` is the name of the current animal that you are analyzing (if left blank, the animal name will be `'default_animal'`)
  - `camtype` is the type of camera you are using (`'cv2'` for standard, openCV-compatible webcam, `'sentech'` for Sentech USB3 camera
- as used in our paper.
+ as used in our paper).
 
 Shortcut (using default options as listed above):
 ```python
@@ -64,7 +66,7 @@ this file will return errors! All references to this Python module have been com
 2.  Put `__init.py__` from the `top_level` folder, and `cli.py`, in the `deeplabcut` folder (one level up from `pose_estimation_tensorflow`).
 
 ## Dependencies
-In addition to installing [DeepLabCut](https://github.com/AlexEMG/DeepLabCut/blob/master/docs/installation.md), you need
+In addition to installing [DeepLabCut](https://github.com/DeepLabCut/DeepLabCut/blob/master/docs/installation.md), you need
 to run:
 ```text
 pip install pysentech pyftdi opencv-python scikit-image
@@ -111,7 +113,7 @@ and our accompanying [DeepCutRealTime repo](https://github.com/bf777/DeepCutReal
 }
 ```
 
-`predict_stream.py` is adapted from is adapted from [`predict_videos.py`](https://github.com/AlexEMG/DeepLabCut/blob/master/deeplabcut/pose_estimation_tensorflow/predict_videos.py)
+`predict_stream.py` is adapted from is adapted from [`predict_videos.py`](https://github.com/DeepLabCut/DeepLabCut/blob/master/deeplabcut/pose_estimation_tensorflow/predict_videos.py)
  in DeepLabCut. The citation for DeepLabCut is:
 ```text
 @article{Mathisetal2018,
