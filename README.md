@@ -27,13 +27,9 @@ your setup.
 1. Use DeepLabCut to train a pose estimation model with eight points (you can train it with fewer or more points, but this
 may require you to change the threshold code to avoid errors. A guide to changing the feedback threshold is coming soon!)
 2. Clone this repository and run `setup.py` to install the necessary dependencies.
-3. To run the code, use our custom DeepLabCut function:
+3. To run the code, enter your DeepLabCut environment (e.g. `activate DLC-CPU` or `activate DLC-GPU`), then:
 ```python
 deepcut2realtime.analyze_stream(config_path, save_path, save_as_csv=True, save_frames=True, baseline=False, name=animal_name, camtype='cv2')
-```
-Shortcut (using default options as listed above):
-```python
-deepcut2realtime.analyze_stream(config_path, save_path)
 ```
 Where:
  - `config_path` is the path to your DeepLabCut model configuration file
@@ -41,6 +37,11 @@ Where:
  - `animal_name` is the name of the current animal that you are analyzing (if left blank, the animal name will be `'default_animal'`)
  - `camtype` is the type of camera you are using (`'cv2'` for standard, openCV-compatible webcam, `'sentech'` for Sentech USB3 camera
  as used in our paper.
+
+Shortcut (using default options as listed above):
+```python
+deepcut2realtime.analyze_stream(config_path, save_path)
+```
  
 There are a number of options that you can also define:
 `save_as_csv`: Choose whether or not to save the output data to CSV.
